@@ -1,20 +1,36 @@
 import express from "express";
+import dotenv from 'dotenv';
 
+dotenv.config();
+import cors from "cors";
+import { dbConnect } from './db/config';
 const app = express();
-const port = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-    res.send({
-      message: "Hello, World!",
-    });
-});
+// Base de datos
+dbConnect();
 
-app.get("/random", (req, res) => {
-    res.send({
-      number: Math.floor(Math.random() * 100),
-    });
-});
 
-app.listen(port, () => {
-  console.log(`Application listening on port ${port}`);
+// Directorio Público
+app.use( express.static('dist'));
+
+// CORS
+app.use( cors() );
+
+// Lectura y parseo del body
+app.use( express.json({ limit: '10mb' }));
+app.use( express.urlencoded({ extended: true, limit: '10mb' }));
+
+
+// Rutas
+// import authRouter from './routers/auth';
+import carRouter from './routers/car';
+// import userRouter from './routers/user';
+
+
+// app.use("/api/auth", authRouter);
+app.use("/api/car", carRouter);
+// app.use("/api/user", userRouter);
+
+app.listen( process.env.PORT, () => {
+    console.log(`Servidor corriendo en puerto ${ process.env.PORT }`);
 });
