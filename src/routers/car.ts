@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import asyncHandler from 'express-async-handler';
-const Car = require("../models/Car");
+const Car = require("../models/car");
 
 const carRouter = Router();
 
